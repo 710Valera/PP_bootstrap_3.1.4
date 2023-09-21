@@ -5,7 +5,8 @@ CREATE TABLE `users` (
   `email` VARCHAR(45) NULL,
   `password` VARCHAR(255) NULL,
   `age` INT NULL,
-  PRIMARY KEY (`id`));
+  PRIMARY KEY (`id`))
+  ENGINE=InnoDB;
 
 
 INSERT INTO `users` SET `id` = '1', `first_name` = 'admin', `email` = 'admin@test.ru', `last_name` = 'Ivanov', `age` = '22', `password` = '$2a$12$OFS3aw6YmdHcv/dsWeNzfOLajfinw.WZtWIXTS0yVCDMks.MSFzJK';
@@ -16,7 +17,8 @@ INSERT INTO  `users` SET `id` = '2', `first_name` = 'user', `email` = 'user@test
 CREATE TABLE `roles` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `role` VARCHAR(45) NULL,
-  PRIMARY KEY (`id`));
+  PRIMARY KEY (`id`))
+  ENGINE=InnoDB;
 
 
 insert into `roles` SET `id` = '1', `role` = 'ROLE_ADMIN';
@@ -30,7 +32,7 @@ create table users_roles
         foreign key (roles_id) references roles (id),
     constraint users_id
         foreign key (users_id) references users (id)
-);
+)ENGINE=InnoDB;
 
 insert into `users_roles` SET `users_id` = '1', `roles_id` = '1';
 insert into `users_roles` SET `users_id` = '1', `roles_id` = '2';

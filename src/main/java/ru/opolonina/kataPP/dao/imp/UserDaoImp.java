@@ -5,7 +5,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.opolonina.kataPP.dao.UserDao;
+import ru.opolonina.kataPP.model.Role;
 import ru.opolonina.kataPP.model.User;
+import ru.opolonina.kataPP.service.RoleService;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -19,6 +21,12 @@ public class UserDaoImp implements UserDao {
 
 
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    public UserDaoImp(RoleService roleService) {
+        this.roleService = roleService;
+    }
+
+    RoleService roleService;
     @PersistenceContext
     public EntityManager entityManager;
 
@@ -35,8 +43,10 @@ public class UserDaoImp implements UserDao {
         if (user.getPassword() != null){
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
-        System.out.println("DAO" + user.toString());
+        List<Role> roles = roleService.parseRoleList(user.getRoles());
+        user.setRoles(roles);
         entityManager.persist(user);
+        entityManager.flush();
     }
 
     @Override
@@ -50,11 +60,10 @@ public class UserDaoImp implements UserDao {
     public void updateUser(User updateUser, int id) {
         User user_from_DB = entityManager.find(User.class, id);
         user_from_DB.setUsername(updateUser.getUsername());
-        user_from_DB.setLastname(updateUser.getLastname()); //сохраняет
-        user_from_DB.setAge(updateUser.getAge()); //сохраняет
-        user_from_DB.setEmail(updateUser.getEmail()); //сохраняет
+        user_from_DB.setLastname(updateUser.getLastname());
+        user_from_DB.setAge(updateUser.getAge());
+        user_from_DB.setEmail(updateUser.getEmail());
         user_from_DB.setRoles(updateUser.getRoles());
-
         if (user_from_DB.getPassword().equals(updateUser.getPassword())) {
             addUser(user_from_DB);
         } else {

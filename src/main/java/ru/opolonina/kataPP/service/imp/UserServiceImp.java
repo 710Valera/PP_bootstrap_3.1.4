@@ -32,10 +32,19 @@ public class UserServiceImp implements UserService, UserDetailsService {
         return userDao.getAllUsers();
     }
 
+
     @Override
     public void saveUser(User user) {
-        userDao.addUser(user);
+        User userToSave = new User();
+        userToSave.setUsername(user.getUsername());
+        userToSave.setLastname(user.getLastname());
+        userToSave.setAge(user.getAge());
+        userToSave.setEmail(user.getEmail());
+        userToSave.setPassword(user.getPassword());
+        userToSave.setRoles(user.getRoles());
+        userDao.addUser(userToSave);
     }
+
 
     @Override
     public User findUserById(int id) {

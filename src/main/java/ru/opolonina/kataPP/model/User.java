@@ -31,10 +31,10 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
-    @ManyToMany (fetch = FetchType.EAGER, cascade = CascadeType.ALL  )
+    @ManyToMany (fetch = FetchType.EAGER, cascade = CascadeType.DETACH  )
     @JoinTable(name = "users_roles",
-            joinColumns = @JoinColumn(name = "users_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "roles_id", referencedColumnName = "id"))
+            joinColumns = @JoinColumn(name = "users_id"),
+            inverseJoinColumns = @JoinColumn(name = "roles_id"))
 
     private List<Role> roles = new ArrayList<>();
 
@@ -50,6 +50,7 @@ public class User implements UserDetails {
         this.roles = roles;
 
     }
+
 
     public int getId() {
         return id;
